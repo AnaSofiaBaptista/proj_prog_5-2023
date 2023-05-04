@@ -10,7 +10,7 @@ namespace prog
     pixels_ = new Color*[width_];  //guarda na memória a(s) coluna(s) de pixeis
 
     for (int i = 0; i < width_; i++) {    //itera sobre a(s) coluna(s)
-      pixels_[i] = new Color[height_](); 
+      pixels_[i] = new Color[height_]; 
 
       for (int j = 0; j < height_; j++) {    //itera sobre a(s) linha(s)
         pixels_[i][j] = fill;
@@ -24,7 +24,7 @@ namespace prog
       delete[] pixels_[i];
     }
 
-    delete[] pixels_;
+    delete[] pixels_;                //remove a matriz de pixeis da memória
   }
 
   int Image::width() const
