@@ -26,8 +26,11 @@ namespace prog
     void save();
     void invert();
     void to_gray_scale();
+    void replace();
     void replace(rgb_value r1, rgb_value g1, rgb_value b1, rgb_value r2, rgb_value g2, rgb_value b2);
-    void fill(rgb_value r1, rgb_value g1, rgb_value b1, int w, int h, Color x, Color y);
+    void fill(rgb_value r1, rgb_value g1, rgb_value b1, int w, int h, int x, int y);
+    void h_mirror();
+    void v_mirror();
   };
 }
 #endif
