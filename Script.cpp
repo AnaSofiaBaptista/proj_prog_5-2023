@@ -187,7 +187,7 @@ namespace prog {
         }
     }
     
-     void Script::add(string &filename, rgb_value r1, rgb_value g1, rgb_value b1, int x, int y){
+     void Script::add(std::string &filename, rgb_value r1, rgb_value g1, rgb_value b1, int x, int y){
         int width_ = image->width();
         int height_ = image->height();
         
