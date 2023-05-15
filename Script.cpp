@@ -81,7 +81,7 @@ namespace prog {
         saveToPNG(filename, image);
     }
 
-    void Script::invert(){
+    void Script::invert() {
         int width_ = image->width();
         int height_ = image->height();
         for (int i = 0; i < width_; i++){
@@ -93,7 +93,7 @@ namespace prog {
         }
     }
 
-    void Script::to_gray_scale(){
+    void Script::to_gray_scale() {
         int width_ = image->width();
         int height_ = image->height();
         for (int i = 0; i < width_; i++){
