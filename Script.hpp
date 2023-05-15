@@ -31,6 +31,7 @@ namespace prog
     void fill(rgb_value r1, rgb_value g1, rgb_value b1, int w, int h, int x, int y);
     void h_mirror();
     void v_mirror();
+    void add(std::string &filename, rgb_value r1, rgb_value g1, rgb_value b1, int x, int y);
   };
 }
 #endif
