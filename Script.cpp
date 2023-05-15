@@ -48,11 +48,11 @@ namespace prog {
                 save();
                 continue;
             } 
-            if (command == "invert") {
+            if(command == "invert"){
                 invert();
                 continue;
             }
-            if(command == "to_gray_scale") {
+            if(command == "to_gray_scale"){
                 to_gray_scale();
                 continue;
             }
@@ -63,16 +63,22 @@ namespace prog {
                 replace(col1.red(), col1.green(), col1.blue(), col2.red(), col2.green(), col2.blue());
                 continue;
             }
-            if(command == "fill") {
+            if (command == "fill") {
+                int x, y, w, h;
+                input >> x >> y >> w >> h;
                 Color col1;
                 input >> col1;
-                int w, h;
-                input >> w;
-                input >> h;
-                Image ;
-                input >> i
-                fill(col1.red(), col1.green(), col1.blue(), w, h, );
+                fill(col1.red(), col1.green(), col1.blue(), w, h, x, y);
                 continue;
+            }
+            if(command == "h_mirror"){
+                h_mirror();
+                continue;
+            }
+            if(command == "v_mirror"){
+                v_mirror();
+                continue;
+            }
         }
     }
     void Script::open() {
@@ -96,8 +102,7 @@ namespace prog {
         input >> filename;
         saveToPNG(filename, image);
     }
-
-    void Script::invert() {
+    void Script::invert(){
         int width_ = image->width();
         int height_ = image->height();
         for (int i = 0; i < width_; i++){
@@ -109,7 +114,7 @@ namespace prog {
         }
     }
 
-    void Script::to_gray_scale() {
+    void Script::to_gray_scale(){
         int width_ = image->width();
         int height_ = image->height();
         for (int i = 0; i < width_; i++){
@@ -134,5 +139,51 @@ namespace prog {
             }
         }
     }
-    void Script::fill(rgb_value r1, rgb_value g1, rgb_value b1, int w, int h, Color x, Color y)
+    void Script::fill(rgb_value r1, rgb_value g1, rgb_value b1, int w, int h, int x, int y) {
+        int width_ = image->width();
+        int height_ = image->height();
+        for (int i = x; i < width_ && i < x+w; i++){
+            for (int j = y; j < height_ && j < y+h ; j++){
+                image->at(i, j).red() = r1;
+                image->at(i, j).green() = g1;
+                image->at(i, j).blue() = b1;
+            }
+        }
+    }
+    void Script::h_mirror() {
+        int width_ = image->width();
+        int height_ = image->height();
+        int r, g, b;
+        for (int i = 0; i < width_/2; i++){
+            for (int j = 0; j < height_; j++){
+                r = image->at(width_ - 1- i, j).red();
+                g = image->at(width_ - 1 - i, j).green();
+                b = image->at(width_ - 1 - i, j).blue();
+                image->at(width_ - 1- i, j).red() = image->at(i, j).red();
+                image->at(width_ - 1 - i, j).green() = image->at(i, j).green();
+                image->at(width_ - 1 - i, j).blue() = image->at(i, j).blue();
+                image->at(i, j).red() = r;
+                image->at(i, j).green() = g;
+                image->at(i, j).blue() = b;
+            }
+        }
+    }
+    void Script::v_mirror() {
+        int width_ = image->width();
+        int height_ = image->height();
+        int r, g, b;
+        for (int i = 0; i < width_; i++){
+            for (int j = 0; j < height_/2; j++){
+                r = image->at(i, height_ - 1- j).red();
+                g = image->at(i, height_ - 1 - j).green();
+                b = image->at(i, height_ - 1- j).blue();
+                image->at(i, height_ - 1- j).red() = image->at(i, j).red();
+                image->at(i, height_ - 1- j).green() = image->at(i, j).green();
+                image->at(i, height_ - 1- j).blue() = image->at(i, j).blue();
+                image->at(i, j).red() = r;
+                image->at(i, j).green() = g;
+                image->at(i, j).blue() = b;
+            }
+        }
+    }
 }
