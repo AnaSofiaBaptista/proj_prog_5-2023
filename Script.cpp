@@ -81,18 +81,13 @@ namespace prog {
             }
             
             if(command == "add"){
+                Color col1;
+                input >> col1;
+                int x, y;
+                input >> x >> y;
                 string filename;
-                rgb_value r1;
-                rgb_value g1;
-                rgb_value b1;
-
-                int x;
-                int y;
-
                 input >> filename;
-                input >> r1 >> g1 >> b1 >> x >> y;
-
-                add(filename, r1, g1, b1, x, y);
+                add(filename, col1.red(), col1.green(), col1.blue(), x, y);
                 continue;
             }
         }
