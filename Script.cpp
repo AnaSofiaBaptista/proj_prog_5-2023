@@ -56,7 +56,23 @@ namespace prog {
                 to_gray_scale();
                 continue;
             }
-
+            if(command == "replace") {
+                Color col1, col2;
+                input >> col1;
+                input >> col2;
+                replace(col1.red(), col1.green(), col1.blue(), col2.red(), col2.green(), col2.blue());
+                continue;
+            }
+            if(command == "fill") {
+                Color col1;
+                input >> col1;
+                int w, h;
+                input >> w;
+                input >> h;
+                Image ;
+                input >> i
+                fill(col1.red(), col1.green(), col1.blue(), w, h, );
+                continue;
         }
     }
     void Script::open() {
@@ -105,4 +121,18 @@ namespace prog {
             }
         }
     }
+    void Script::replace(rgb_value r1, rgb_value g1, rgb_value b1, rgb_value r2, rgb_value g2, rgb_value b2) {
+        int width_ = image->width();
+        int height_ = image->height();
+        for (int i = 0; i < width_; i++){
+            for (int j = 0; j < height_; j++){
+                if (image->at(i, j).red() == r1 && image->at(i, j).green() == g1 && image->at(i, j).blue() == b1) {
+                    image->at(i, j).red() = r2;
+                    image->at(i, j).green() = g2;
+                    image->at(i, j).blue() = b2;
+                }
+            }
+        }
+    }
+    void Script::fill(rgb_value r1, rgb_value g1, rgb_value b1, int w, int h, Color x, Color y)
 }
