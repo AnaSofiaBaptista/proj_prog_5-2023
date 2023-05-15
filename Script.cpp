@@ -52,7 +52,10 @@ namespace prog {
                 invert();
                 continue;
             }
-            if(command == "to_gray_scale") []
+            if(command == "to_gray_scale") {
+                to_gray_scale();
+                continue;
+            }
 
         }
     }
@@ -90,5 +93,16 @@ namespace prog {
         }
     }
 
-    void 
+    void Script::to_gray_scale(){
+        int width_ = image->width();
+        int height_ = image->height();
+        for (int i = 0; i < width_; i++){
+            for (int j = 0; j < height_; j++){
+                int v = (image->at(i, j).red() + image->at(i, j).blue() + image->at(i, j).green())/3;
+                image->at(i, j).red() = v;
+                image->at(i, j).green() = v;
+                image->at(i, j).blue() = v;
+            }
+        }
+    }
 }
