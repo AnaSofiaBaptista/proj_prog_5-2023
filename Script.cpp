@@ -3,6 +3,7 @@
 #include "Script.hpp"
 #include "PNG.hpp"
 #include "XPM2.hpp"
+#include <string>
 
 using namespace std;
 
@@ -79,14 +80,13 @@ namespace prog {
                 v_mirror();
                 continue;
             }
-            
             if(command == "add"){
+                string filename;
+                input >> filename;
                 Color col1;
                 input >> col1;
                 int x, y;
                 input >> x >> y;
-                string filename;
-                input >> filename;
                 add(filename, col1.red(), col1.green(), col1.blue(), x, y);
                 continue;
             }
@@ -198,25 +198,22 @@ namespace prog {
         }
     }
     
-     void Script::add(string &filename, rgb_value r1, rgb_value g1, rgb_value b1, int x, int y){
-        int width_ = image->width();
-        int height_ = image->height();
-        
-        Image* new_image;
-        new_image = loadFromPNG(filename);
-        for (int i = 0; i < width_; i++){
-            for (int j = 0; j < height_; j++){
-                if(new_image->at(i, j).red() == r1 && new_image->at(i, j).green() == g1 && new_image->at(i, j).blue() == b1){
-                    continue;
+     void Script::add(const string &filename, rgb_value r, rgb_value g, rgb_value b, int x, int y){
+        Image* new_image = loadFromPNG(filename);
+        int nw = new_image -> width();
+        int nh = new_image -> height();
+        for (int i = 0; i < nw; i++){
+            for (int j = 0; j < nh; j++){
+                int tempw = x + i;
+                int temph = y + j;
+                if(new_image->at(i, j).red() != r || new_image->at(i, j).green() != g || new_image->at(i, j).blue() != b){
+                    image->at(tempw, temph).red() = new_image->at(i,j).red();
+                    image->at(tempw, temph).green() = new_image->at(i,j).green();
+                    image->at(tempw, temph).blue() = new_image->at(i,j).blue();
                 }
-
-                else{
-                    image->at(x+i, y+j).red() = new_image->at(i,j).red();
-                    image->at(x+i, y+j).green() = new_image->at(i,j).green();
-                    image->at(x+i, y+j).blue() = new_image->at(i,j).blue();
-                }
-
             }        
         }
+        delete new_image;
     }
+}
 }
