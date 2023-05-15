@@ -98,7 +98,7 @@ namespace prog {
         int height_ = image->height();
         for (int i = 0; i < width_; i++){
             for (int j = 0; j < height_; j++){
-                int v = (image->at(i, j).red() + image->at(i, j).blue() + image->at(i, j).green())/3;
+                rgb_value v = (image->at(i, j).red() + image->at(i, j).blue() + image->at(i, j).green())/3;
                 image->at(i, j).red() = v;
                 image->at(i, j).green() = v;
                 image->at(i, j).blue() = v;
