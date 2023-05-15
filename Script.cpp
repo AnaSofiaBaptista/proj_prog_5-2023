@@ -186,4 +186,26 @@ namespace prog {
             }
         }
     }
+    
+     void Script::add(string &filename, rgb_value r1, rgb_value g1, rgb_value b1, int x, int y){
+        int width_ = image->width();
+        int height_ = image->height();
+        
+        Image* new_image;
+        new_image = loadFromPNG(filename);
+        for (int i = 0; i < width_; i++){
+            for (int j = 0; j < height_; j++){
+                if(new_image->at(i, j).red() == r1 && new_image->at(i, j).green() == g1 && new_image->at(i, j).blue() == b1){
+                    continue;
+                }
+
+                else{
+                    image->at(x+i, y+j).red() = new_image->at(i,j).red();
+                    image->at(x+i, y+j).green() = new_image->at(i,j).green();
+                    image->at(x+i, y+j).blue() = new_image->at(i,j).blue();
+                }
+
+            }        
+        }
+    }
 }
