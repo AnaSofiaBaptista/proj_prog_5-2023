@@ -90,6 +90,26 @@ namespace prog {
                 add(filename, col1.red(), col1.green(), col1.blue(), x, y);
                 continue;
             }
+            if(command == "crop"){
+                int x, y , w, h;
+                input >> x >> y >> w >> h;
+                crop(x, y, w, h);
+                continue;
+            }
+            if(command == "rotate_left"){
+                rotate_left();
+                continue;
+            }
+            if(command == "rotate_right"){
+                rotate_right();
+                continue;
+            }
+            if(command == "median_filter"){
+                int ws;
+                input >> ws;
+                median_filter(ws);
+                continue;
+            }
         }
     }
     void Script::open() {
@@ -215,5 +235,50 @@ namespace prog {
         }
         delete new_image;
     }
-}
+
+    void Script::crop(int x, int y, int w, int h) {
+
+        // Create a new image to store the cropped pixels
+        Image* croppedImage = new Image(w, h);
+
+        // Copy the pixels from the original image to the cropped image
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
+                croppedImage->at(i, j) = image->at(x + i, y + j);
+            }
+        }
+
+        // Delete the previous image if any
+        delete image;
+
+        // Assign the cropped image to the current image
+        image = croppedImage;
+    }
+    void Script::rotate_left(){
+        int width_ = image->width();
+        int height_ = image->height();
+        Image* left_image = new Image(height_, width_);
+        for (int j = 0; j < height_; j++){
+            for (int i = 0; i < width_; i++){
+                left_image->at( j, width_ - i - 1) = image->at(i, j);
+            }
+        }
+        delete image;
+        image = left_image;
+    }
+    void Script::rotate_right(){
+        int width_ = image->width();
+        int height_ = image->height();
+        Image* right_image = new Image(height_, width_);
+        for (int j = 0; j < height_; j++){
+            for (int i = 0; i < width_; i++){
+                right_image->at(height_ -j -1, i) = image->at(i, j);
+            }
+        }
+        delete image;
+        image = right_image;
+    }
+    void median_filter(int ws){
+        
+    }
 }
