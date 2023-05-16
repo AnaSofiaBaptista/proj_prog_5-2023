@@ -11,7 +11,6 @@ using namespace std;
 
 namespace prog
 {
-    // Use to read color values from a script file.
     // Usado para ler valores de cores de um ficheiro script.
 
     istream &operator>>(istream &input, Color &c)
