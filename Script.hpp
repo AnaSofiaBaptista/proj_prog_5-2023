@@ -32,6 +32,10 @@ namespace prog
     void h_mirror();
     void v_mirror();
     void add(const std::string &filename, rgb_value r, rgb_value g, rgb_value b, int x, int y);
+    void crop(int x, int y, int w, int h);
+    void rotate_left();
+    void rotate_right();
+    void median_filter(int ws);
   };
 }
 #endif
