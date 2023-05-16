@@ -12,6 +12,8 @@ using namespace std;
 namespace prog
 {
     // Use to read color values from a script file.
+    // Usado para ler valores de cores de um ficheiro script.
+
     istream &operator>>(istream &input, Color &c)
     {
         int r, g, b;
@@ -22,17 +24,24 @@ namespace prog
         return input;
     }
 
+    // Construtor da classe Script.
+
     Script::Script(const string &filename) : image(nullptr), input(filename)
     {
     }
     void Script::clear_image_if_any()
     {
+        // Função usada para limpar a imagem atual se existir.
+
         if (image != nullptr)
         {
             delete image;
             image = nullptr;
         }
     }
+
+    // Destruidor da classe Script.
+
     Script::~Script()
     {
         clear_image_if_any();
@@ -136,7 +145,8 @@ namespace prog
     }
     void Script::open()
     {
-        // Replace current image (if any) with image read from PNG file.
+        // Substitui a imagem atual (se existir) pela imagem lida do ficheiro PNG.
+
         clear_image_if_any();
         string filename;
         input >> filename;
@@ -144,7 +154,8 @@ namespace prog
     }
     void Script::blank()
     {
-        // Replace current image (if any) with blank image.
+        // Substitui a imagem atual (se existir) por uma imagem em branco.
+
         clear_image_if_any();
         int w, h;
         Color fill;
@@ -153,15 +164,22 @@ namespace prog
     }
     void Script::save()
     {
-        // Save current image to PNG file.
+        // Guarda a imagem atual num ficheiro PNG.
+
         string filename;
         input >> filename;
         saveToPNG(filename, image);
     }
     void Script::invert()
     {
-        int width_ = image->width();
-        int height_ = image->height();
+        // Transforma cada pixel (r, g, b) para (255-r, 255-g, 255-b).
+        // Inverte as cores.
+        
+        int width_ = image->width();       // Obtem a largura da imagem.
+        int height_ = image->height();     // Obtem a altura da imagem.
+
+        // Percorre cada pixel da imagem
+        
         for (int i = 0; i < width_; i++)
         {
             for (int j = 0; j < height_; j++)
@@ -175,8 +193,12 @@ namespace prog
 
     void Script::to_gray_scale()
     {
+        // Transforma cada pixel (r, g, b) para (v, v, v) tal que v = (r + g + b)/3.
+        // Converte a imagem para uma escala de cinza.
+
         int width_ = image->width();
         int height_ = image->height();
+
         for (int i = 0; i < width_; i++)
         {
             for (int j = 0; j < height_; j++)
@@ -190,8 +212,11 @@ namespace prog
     }
     void Script::replace(rgb_value r1, rgb_value g1, rgb_value b1, rgb_value r2, rgb_value g2, rgb_value b2)
     {
+        // Substitui uma cor por outra na imagem.
+
         int width_ = image->width();
         int height_ = image->height();
+
         for (int i = 0; i < width_; i++)
         {
             for (int j = 0; j < height_; j++)
@@ -207,8 +232,11 @@ namespace prog
     }
     void Script::fill(rgb_value r1, rgb_value g1, rgb_value b1, int w, int h, int x, int y)
     {
+        // Preenche uma área retangular da imagem com uma cor.
+
         int width_ = image->width();
         int height_ = image->height();
+
         for (int i = x; i < width_ && i < x + w; i++)
         {
             for (int j = y; j < height_ && j < y + h; j++)
@@ -221,9 +249,12 @@ namespace prog
     }
     void Script::h_mirror()
     {
+        // Espelha a imagem horizontalmente.
+
         int width_ = image->width();
         int height_ = image->height();
         int r, g, b;
+
         for (int i = 0; i < width_ / 2; i++)
         {
             for (int j = 0; j < height_; j++)
@@ -242,9 +273,12 @@ namespace prog
     }
     void Script::v_mirror()
     {
+        // Espelha a imagem verticalmente.
+
         int width_ = image->width();
         int height_ = image->height();
         int r, g, b;
+
         for (int i = 0; i < width_; i++)
         {
             for (int j = 0; j < height_ / 2; j++)
@@ -264,9 +298,12 @@ namespace prog
 
     void Script::add(const string &filename, rgb_value r, rgb_value g, rgb_value b, int x, int y)
     {
+        // Adiciona outra imagem à imagem atual.
+
         Image *new_image = loadFromPNG(filename);
         int nw = new_image->width();
         int nh = new_image->height();
+
         for (int i = 0; i < nw; i++)
         {
             for (int j = 0; j < nh; j++)
@@ -281,35 +318,43 @@ namespace prog
                 }
             }
         }
+
         delete new_image;
     }
 
     void Script::crop(int x, int y, int w, int h)
     {
+        // Corta uma área retangular da imagem.
+        // Cria uma nova imagem para guardar os pixeis cortados.
 
-        // Create a new image to store the cropped pixels
         Image *croppedImage = new Image(w, h);
 
-        // Copy the pixels from the original image to the cropped image
-        for (int i = 0; i < w; i++)
-        {
-            for (int j = 0; j < h; j++)
-            {
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
+
+                // Copia os pixeis da imagem original para a imagem cortada.
+
                 croppedImage->at(i, j) = image->at(x + i, y + j);
             }
         }
 
-        // Delete the previous image if any
+        // Elimina a imagem anterior se existir.
         delete image;
 
-        // Assign the cropped image to the current image
+        // Atribui a imagem cortada à imagem atual.
         image = croppedImage;
     }
     void Script::rotate_left()
     {
+        // Roda a imagem para a esquerda.
+
         int width_ = image->width();
         int height_ = image->height();
+
+        // Cria uma nova imagem para guardar a rotação da imagem para a esquerda.
+
         Image *left_image = new Image(height_, width_);
+
         for (int j = 0; j < height_; j++)
         {
             for (int i = 0; i < width_; i++)
@@ -317,14 +362,21 @@ namespace prog
                 left_image->at(j, width_ - i - 1) = image->at(i, j);
             }
         }
+        
         delete image;
         image = left_image;
     }
     void Script::rotate_right()
     {
+        // Roda a imagem para a direita.
+        
         int width_ = image->width();
         int height_ = image->height();
+
+        // Cria uma nova imagem para guardar a rotação da imagem para a direita.
+        
         Image *right_image = new Image(height_, width_);
+
         for (int j = 0; j < height_; j++)
         {
             for (int i = 0; i < width_; i++)
@@ -332,11 +384,12 @@ namespace prog
                 right_image->at(height_ - j - 1, i) = image->at(i, j);
             }
         }
+
         delete image;
         image = right_image;
     }
-
-    void Script::median_filter(int ws){
+    void Script::median_filter(int ws)
+    {
         int width_ = image->width();
         int height_ = image->height();
 
