@@ -387,45 +387,68 @@ namespace prog
         delete image;
         image = right_image;
     }
-    void Script::median_filter(int ws)
-    {
+    void Script::median_filter(int ws) {
         int width_ = image->width();
         int height_ = image->height();
 
-        int edge_x = ws / 2;
-        int edge_y = ws / 2;
+        Image* filtImage = new Image(width_, height_);
 
-        for (int x = edge_x; x < width_ - edge_x; x++) {
-            for (int y = edge_y; y < height_ - edge_y; y++)
-            {
-                vector<int> red_values;
-                vector<int> green_values;
-                vector<int> blue_values;
+        int halfSize = ws / 2;
 
-                for (int fx = 0; fx < ws; fx++) {
-                    for (int fy = 0; fy < ws; fy++) {
-                        int pixel_x = x + fx - edge_x;
-                        int pixel_y = y + fy - edge_y;
+        for (int x = 0; x < width_; x++) {
+            for (int y = 0; y < height_; y++) {
+                vector<rgb_value> red_vect;
+                vector<rgb_value> green_vect;
+                vector<rgb_value> blue_vect;
 
-                        red_values.push_back(image->at(pixel_x, pixel_y).red());
-                        green_values.push_back(image->at(pixel_x, pixel_y).green());
-                        blue_values.push_back(image->at(pixel_x, pixel_y).blue());
+                // Collect pixel values from the neighborhood
+
+                for (int nx = max(0, x - halfSize); nx <= min(width_ - 1, x + halfSize); nx++) {
+                    for (int ny = max(0, y - halfSize); ny <= min(height_ - 1, y + halfSize); ny++) {
+                        red_vect.push_back(image->at(nx, ny).red());
+                        green_vect.push_back(image->at(nx, ny).green());
+                        blue_vect.push_back(image->at(nx, ny).blue());
                     }
                 }
 
-                sort(red_values.begin(), red_values.end());
-                sort(green_values.begin(), green_values.end());
-                sort(blue_values.begin(), blue_values.end());
+                // Sort the pixel values in ascending order
 
-                int median_index = ws * ws / 2;
-                int median_red = red_values[median_index];
-                int median_green = green_values[median_index];
-                int median_blue = blue_values[median_index];
+                sort(red_vect.begin(), red_vect.end());
+                sort(green_vect.begin(), green_vect.end());
+                sort(blue_vect.begin(), blue_vect.end());
 
-                image->at(x, y).red() = median_red;
-                image->at(x, y).green() = median_green;
-                image->at(x, y).blue() = median_blue;
+                // Find the median pixel value for each channel
+
+                int si = red_vect.size();
+                int medIndex = si / 2;
+                if (si % 2 == 0) {
+                    rgb_value medRed = (red_vect[medIndex] + red_vect[medIndex - 1]) / 2;
+                    rgb_value medGreen = (green_vect[medIndex] + green_vect[medIndex - 1]) / 2;
+                    rgb_value medBlue = (blue_vect[medIndex] + blue_vect[medIndex - 1]) / 2;
+
+                    // Assign the median pixel value to the filtered image
+
+                    filtImage->at(x, y).red() = medRed;
+                    filtImage->at(x, y).green() = medGreen;
+                    filtImage->at(x, y).blue() = medBlue;
+                }
+                if (si % 2 == 1) {
+                    rgb_value medRed = red_vect[medIndex];
+                    rgb_value medGreen = green_vect[medIndex];
+                    rgb_value medBlue = blue_vect[medIndex];
+
+                    // Assign the median pixel value to the filtered image
+
+                    filtImage->at(x, y).red() = medRed;
+                    filtImage->at(x, y).green() = medGreen;
+                    filtImage->at(x, y).blue() = medBlue;
+                }
             }
         }
+
+        // Replace the original image with the filtered image
+
+        delete image;
+        image = filtImage;
     }
 }
