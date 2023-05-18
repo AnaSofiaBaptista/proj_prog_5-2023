@@ -330,6 +330,8 @@ namespace prog
             }
         }
 
+        // Elimina a imagem anterior se existir.
+
         delete new_image;
     }
     void Script::crop(int x, int y, int w, int h)
@@ -339,8 +341,10 @@ namespace prog
 
         Image *croppedImage = new Image(w, h);
 
-        for (int i = 0; i < w; i++) {
-            for (int j = 0; j < h; j++) {
+        for (int i = 0; i < w; i++) 
+        {
+            for (int j = 0; j < h; j++) 
+            {
 
                 // Copia os pixeis da imagem original para a imagem cortada.
 
@@ -349,9 +353,11 @@ namespace prog
         }
 
         // Elimina a imagem anterior se existir.
+
         delete image;
 
         // Atribui a imagem cortada à imagem atual.
+
         image = croppedImage;
     }
     void Script::rotate_left()
@@ -373,6 +379,8 @@ namespace prog
             }
         }
         
+        // Substituir a imagem atual por uma rodada 90º para a esquerda.
+
         delete image;
         image = left_image;
     }
@@ -395,61 +403,68 @@ namespace prog
             }
         }
 
+        // Substituir a imagem atual por uma rodada 90º para a direita.
+
         delete image;
         image = right_image;
     }
-    void Script::median_filter(int ws) {
+    void Script::median_filter(int ws) 
+    {
+        // Aplicar um "median filter" em quadrados de ws>=3 na currente imagem.
+
         int width_ = image->width();
         int height_ = image->height();
+
+        // Cria uma nova imagemcom para guardar a imagem com o "median filter" aplicado.
 
         Image* filtImage = new Image(width_, height_);
 
         int halfSize = ws / 2;
 
         for (int x = 0; x < width_; x++) {
-            for (int y = 0; y < height_; y++) {
+            for (int y = 0; y < height_; y++) 
+            {
                 vector<rgb_value> red_vect;
                 vector<rgb_value> green_vect;
                 vector<rgb_value> blue_vect;
 
-                // Collect pixel values from the neighborhood
+                // Forma vetores com os pixeis na vizinhança.
 
-                for (int nx = max(0, x - halfSize); nx <= min(width_ - 1, x + halfSize); nx++) {
-                    for (int ny = max(0, y - halfSize); ny <= min(height_ - 1, y + halfSize); ny++) {
+                for (int nx = max(0, x - halfSize); nx <= min(width_ - 1, x + halfSize); nx++) 
+                {
+                    for (int ny = max(0, y - halfSize); ny <= min(height_ - 1, y + halfSize); ny++) 
+                    {
                         red_vect.push_back(image->at(nx, ny).red());
                         green_vect.push_back(image->at(nx, ny).green());
                         blue_vect.push_back(image->at(nx, ny).blue());
                     }
                 }
 
-                // Sort the pixel values in ascending order
+                // Ordena os pixeis por ordem crescente.
 
                 sort(red_vect.begin(), red_vect.end());
                 sort(green_vect.begin(), green_vect.end());
                 sort(blue_vect.begin(), blue_vect.end());
 
-                // Find the median pixel value for each channel
-
                 int si = red_vect.size();
                 int medIndex = si / 2;
-                if (si % 2 == 0) {
+                if (si % 2 == 0) 
+                {
+                    // Fazer a média das cores dos dois pixeis medianos se o número de pixeis na vizinhança for par.
+
                     rgb_value medRed = (red_vect[medIndex] + red_vect[medIndex - 1]) / 2;
                     rgb_value medGreen = (green_vect[medIndex] + green_vect[medIndex - 1]) / 2;
                     rgb_value medBlue = (blue_vect[medIndex] + blue_vect[medIndex - 1]) / 2;
-
-                    // Assign the median pixel value to the filtered image
-
                     filtImage->at(x, y).red() = medRed;
                     filtImage->at(x, y).green() = medGreen;
                     filtImage->at(x, y).blue() = medBlue;
                 }
-                if (si % 2 == 1) {
+                if (si % 2 == 1) 
+                {
+                    // Usar as cores do pixel mediano se o número de pixeis na vizinhança for ímpar.
                     rgb_value medRed = red_vect[medIndex];
                     rgb_value medGreen = green_vect[medIndex];
                     rgb_value medBlue = blue_vect[medIndex];
-
-                    // Assign the median pixel value to the filtered image
-
                     filtImage->at(x, y).red() = medRed;
                     filtImage->at(x, y).green() = medGreen;
                     filtImage->at(x, y).blue() = medBlue;
@@ -457,18 +472,20 @@ namespace prog
             }
         }
 
-        // Replace the original image with the filtered image
+        // Substituir a imagem atual pela já com o filtro aplicado.
 
         delete image;
         image = filtImage;
     }
-    void prog::Script::xpm2_open(const string& filename) {
+    void prog::Script::xpm2_open(const string& filename) 
+    {
         // Substitui a imagem atual (se existir) pela imagem lida do ficheiro XPM2.
 
         clear_image_if_any();
         image = loadFromXPM2(filename);
     }
-    void prog::Script::xpm2_save(const string& filename) {
+    void prog::Script::xpm2_save(const string& filename) 
+    {
         // Guarda a imagem atual num ficheiro XPM2.
 
         saveToPNG(filename, image);
