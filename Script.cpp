@@ -140,6 +140,20 @@ namespace prog
                 median_filter(ws);
                 continue;
             }
+            if (command == "xpm2_open")
+            {
+                string filename;
+                input >> filename;
+                xpm2_open(filename);
+                continue;
+            }
+            if (command == "xpm2_save")
+            {
+                string filename;
+                input >> filename;
+                xpm2_save(filename);
+                continue;
+            }
         }
     }
     void Script::open()
@@ -189,7 +203,6 @@ namespace prog
             }
         }
     }
-
     void Script::to_gray_scale()
     {
         // Transforma cada pixel (r, g, b) para (v, v, v) tal que v = (r + g + b)/3.
@@ -294,7 +307,6 @@ namespace prog
             }
         }
     }
-
     void Script::add(const string &filename, rgb_value r, rgb_value g, rgb_value b, int x, int y)
     {
         // Adiciona outra imagem à imagem atual.
@@ -320,7 +332,6 @@ namespace prog
 
         delete new_image;
     }
-
     void Script::crop(int x, int y, int w, int h)
     {
         // Corta uma área retangular da imagem.
@@ -450,5 +461,16 @@ namespace prog
 
         delete image;
         image = filtImage;
+    }
+    void prog::Script::xpm2_open(const string& filename) {
+        // Substitui a imagem atual (se existir) pela imagem lida do ficheiro XPM2.
+
+        clear_image_if_any();
+        image = loadFromXPM2(filename);
+    }
+    void prog::Script::xpm2_save(const string& filename) {
+        // Guarda a imagem atual num ficheiro XPM2.
+
+        saveToPNG(filename, image);
     }
 }
