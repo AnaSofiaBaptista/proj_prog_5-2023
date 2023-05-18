@@ -488,6 +488,6 @@ namespace prog
     {
         // Guarda a imagem atual num ficheiro XPM2.
 
-        saveToPNG(filename, image);
+        saveToXPM2(filename, image);
     }
 }
