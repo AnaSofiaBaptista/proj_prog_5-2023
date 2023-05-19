@@ -33,7 +33,7 @@ namespace prog {
             char character, letter;
             ml >> character >> letter >> color;
 
-            // Converte a sub string num integer de base 16.
+            // Converte a sub string num inteiro de base 16.
 
             rgb_value red = stoi(color.substr(1, 2), nullptr, 16);
             rgb_value green = stoi(color.substr(3, 2), nullptr, 16);
