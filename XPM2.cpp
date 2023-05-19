@@ -62,7 +62,7 @@ namespace prog {
                 auto pixel = find(characters.begin(), characters.end(), pixel_enc);
                 if (pixel != characters.end()) 
                 {
-                     // Se encpntrar a cor, encontra a posição correspondete e aplica-lhe a cor correspondente.
+                     // Se encontrar a cor, encontra a posição correspondete e aplica-lhe a cor correspondente.
 
                     int pos = pixel - characters.begin();
                     load_image->at(i, j) = colors.at(pos);
@@ -74,8 +74,8 @@ namespace prog {
 
     void saveToXPM2(const string& file, const Image* img) 
     {
-        int w = img->width();
-        int h = img->height();
+        int w = img->width();      // Obtem a largura da imagem.
+        int h = img->height();     // Obtem a altura da imagem.
         ofstream output(file);
 
         // Escreve o "header" de XPM2.
